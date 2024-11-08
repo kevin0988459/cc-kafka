@@ -1,14 +1,25 @@
+
+import java.util.Properties;
+
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+
 public class DataProducerRunner {
 
     public static void main(String[] args) throws Exception {
-        /*
-            Tasks to complete:
-            - Write enough tests in the DataProducerTest.java file
-            - Instantiate the Kafka Producer by following the API documentation
-            - Instantiate the DataProducer using the appropriate trace file and the producer
-            - Implement the sendData method as required in DataProducer
-            - Call the sendData method to start sending data
-        */
-            
+        // Kafka Config
+        Properties p = new Properties();
+        p.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.31.86.55:9092");
+        p.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        p.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        p.put(ProducerConfig.ACKS_CONFIG, "all");
+        p.put(ProducerConfig.RETRIES_CONFIG, 3);
+
+        Producer<String, String> producer = new KafkaProducer<>(p);
+        String traceFilePath = "../tracefile";
+        DataProducer dataProducer = new DataProducer(producer, traceFilePath);
+        dataProducer.sendData();
     }
 }
