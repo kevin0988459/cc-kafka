@@ -23,8 +23,7 @@ public class DataProducer {
 
     private static final Set<String> BROADCAST_EVENT_TYPES = new HashSet<>(Arrays.asList(
             "RIDER_STATUS",
-            "RIDER_INTEREST",
-            "RIDE_REQUEST"
+            "RIDER_INTEREST"
     ));
 
     public DataProducer(Producer producer, String traceFileName) {
@@ -41,13 +40,10 @@ public class DataProducer {
                 // parse the json object
                 JsonObject jsonObject = jsonParser.parse(line).getAsJsonObject();
                 String type = jsonObject.get("type").getAsString();
-                int blockId = jsonObject.get("blockId").getAsInt();
                 // skip the driver location event
                 if (type.equals("DRIVER_LOCATION")) {
                     continue;
                 }
-                System.out.println("type: " + type);
-                System.out.println("BROADCAST_EVENT_TYPES bool:" + BROADCAST_EVENT_TYPES.contains(type));
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
                     // Send to all partitions
@@ -57,6 +53,7 @@ public class DataProducer {
                     }
                 } else {
                     // Send based on block ID partitioning
+                    int blockId = jsonObject.get("blockId").getAsInt();
                     int partition = blockId % PARTITION_COUNT;
                     ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
                     sendMessage(record);
