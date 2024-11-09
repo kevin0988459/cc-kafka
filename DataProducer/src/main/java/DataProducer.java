@@ -46,6 +46,7 @@ public class DataProducer {
                 if (type.equals("DRIVER_LOCATION")) {
                     continue;
                 }
+                System.out.println("type: " + type);
                 System.out.println("BROADCAST_EVENT_TYPES bool:" + BROADCAST_EVENT_TYPES.contains(type));
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
