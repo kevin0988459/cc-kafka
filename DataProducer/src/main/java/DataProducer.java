@@ -38,6 +38,7 @@ public class DataProducer {
             String line;
 
             while ((line = reader.readLine()) != null) {
+                System.out.println("Processing line: " + line);
                 // parse the json object
                 JsonObject jsonObject = jsonParser.parse(line).getAsJsonObject();
                 String type = jsonObject.get("type").getAsString();
