@@ -18,8 +18,7 @@ public class DataProducerRunner {
         p.put(ProducerConfig.RETRIES_CONFIG, 3);
 
         Producer<String, String> producer = new KafkaProducer<>(p);
-        String traceFilePath = "~/stream-processing/DataProducer/tracefile";
-        System.out.println("Starting to send data to topic: driver-locations");
+        String traceFilePath = "tracefile";
         DataProducer dataProducer = new DataProducer(producer, traceFilePath);
         dataProducer.sendData();
     }
