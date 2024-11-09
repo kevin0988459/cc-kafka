@@ -1,6 +1,9 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.producer.Producer;
@@ -14,10 +17,15 @@ public class DataProducer {
 
     private Producer<String, String> producer;
     private String traceFileName;
-    private static final String DRIVER_LOCATIONS_TOPIC = "driver-locations";
     private static final String EVENTS_TOPIC = "events";
     private static final int PARTITION_COUNT = 5;
     private JsonParser jsonParser;
+
+    private static final Set<String> BROADCAST_EVENT_TYPES = new HashSet<>(Arrays.asList(
+            "RIDER_STATUS",
+            "RIDER_INTEREST",
+            "RIDE_REQUEST"
+    ));
 
     public DataProducer(Producer producer, String traceFileName) {
         this.producer = producer;
@@ -34,13 +42,23 @@ public class DataProducer {
                 JsonObject jsonObject = jsonParser.parse(line).getAsJsonObject();
                 String type = jsonObject.get("type").getAsString();
                 int blockId = jsonObject.get("blockId").getAsInt();
+                // skip the driver location event
+                if (type.equals("DRIVER_LOCATION")) {
+                    continue;
+                }
                 // determine the topic
-                String topic = type.equals("DRIVER_LOCATION") ? DRIVER_LOCATIONS_TOPIC : EVENTS_TOPIC;
-                // determine the partition
-                int partition = blockId % PARTITION_COUNT;
-                // send the message
-                ProducerRecord<String, String> record = new ProducerRecord<>(topic, partition, null, line);
-                sendMessage(record);
+                if (BROADCAST_EVENT_TYPES.contains(type)) {
+                    // Send to all partitions
+                    for (int partition = 0; partition < PARTITION_COUNT; partition++) {
+                        ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
+                        sendMessage(record);
+                    }
+                } else {
+                    // Send based on block ID partitioning
+                    int partition = blockId % PARTITION_COUNT;
+                    ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
+                    sendMessage(record);
+                }
             }
 
         } catch (Exception e) {
