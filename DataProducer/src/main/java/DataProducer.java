@@ -38,7 +38,6 @@ public class DataProducer {
             String line;
 
             while ((line = reader.readLine()) != null) {
-                System.out.println("Processing line: " + line);
                 // parse the json object
                 JsonObject jsonObject = jsonParser.parse(line).getAsJsonObject();
                 String type = jsonObject.get("type").getAsString();
@@ -49,6 +48,7 @@ public class DataProducer {
                 }
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
+                    System.out.println("Broadcasting event: " + type);
                     // Send to all partitions
                     for (int partition = 0; partition < PARTITION_COUNT; partition++) {
                         ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
