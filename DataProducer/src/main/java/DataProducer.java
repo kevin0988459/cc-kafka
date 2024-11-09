@@ -46,9 +46,9 @@ public class DataProducer {
                 if (type.equals("DRIVER_LOCATION")) {
                     continue;
                 }
+                System.out.println("BROADCAST_EVENT_TYPES bool:" + BROADCAST_EVENT_TYPES.contains(type));
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
-                    System.out.println("Broadcasting event: " + type);
                     // Send to all partitions
                     for (int partition = 0; partition < PARTITION_COUNT; partition++) {
                         ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
