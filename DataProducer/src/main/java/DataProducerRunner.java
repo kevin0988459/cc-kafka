@@ -18,7 +18,7 @@ public class DataProducerRunner {
         p.put(ProducerConfig.RETRIES_CONFIG, 3);
 
         Producer<String, String> producer = new KafkaProducer<>(p);
-        String traceFilePath = "trace_task2";
+        String traceFilePath = "trace_task3";
         DataProducer dataProducer = new DataProducer(producer, traceFilePath);
         dataProducer.sendData();
     }
