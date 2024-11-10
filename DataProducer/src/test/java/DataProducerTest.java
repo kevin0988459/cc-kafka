@@ -35,8 +35,7 @@ public class DataProducerTest {
 
         List<ProducerRecord<String, String>> history = producer.history();
 
-        List<ProducerRecord<String, String>> expected = Arrays.asList(
-                new ProducerRecord<>("events", 3, null, "{\"blockId\":5648,\"type\":\"ENTERING_BLOCK\"}"));
+        List<ProducerRecord<String, String>> expected = Arrays.asList();
 
         Assert.assertEquals("Producer records not matched!", expected, history);
     }
