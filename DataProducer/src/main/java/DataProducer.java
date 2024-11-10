@@ -49,7 +49,7 @@ public class DataProducer {
 
                 if (type.equals("RIDE_REQUEST")) {
                     rideRequestCount++;
-                    System.out.println("Sent ride request to partition", rideRequestCount);
+                    System.out.println("Sent ride request to partition" + rideRequestCount);
                 }
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
