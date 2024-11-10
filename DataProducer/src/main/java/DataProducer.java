@@ -59,13 +59,13 @@ public class DataProducer {
                         sendMessage(record);
                     }
                 } 
-                // else {
-                //     // Send based on block ID partitioning
-                //     int blockId = jsonObject.get("blockId").getAsInt();
-                //     int partition = blockId % PARTITION_COUNT;
-                //     ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
-                //     sendMessage(record);
-                // }
+                else {
+                    // Send based on block ID partitioning
+                    int blockId = jsonObject.get("blockId").getAsInt();
+                    int partition = blockId % PARTITION_COUNT;
+                    ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
+                    sendMessage(record);
+                }
             }
 
         } catch (Exception e) {
