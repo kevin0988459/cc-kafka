@@ -24,7 +24,6 @@ public class DataProducer {
     private static final Set<String> BROADCAST_EVENT_TYPES = new HashSet<>(Arrays.asList(
             "RIDER_STATUS",
             "RIDER_INTEREST",
-            "RIDE_REQUEST"
     ));
 
     public DataProducer(Producer producer, String traceFileName) {
@@ -45,11 +44,6 @@ public class DataProducer {
                 // skip the driver location event
                 if (type.equals("DRIVER_LOCATION")) {
                     continue;
-                }
-
-                if (type.equals("RIDE_REQUEST")) {
-                    rideRequestCount++;
-                    System.out.println("Sent ride request to partition" + rideRequestCount);
                 }
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
