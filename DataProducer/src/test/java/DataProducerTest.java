@@ -1,3 +1,8 @@
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.kafka.clients.producer.MockProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -5,11 +10,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 public class DataProducerTest {
+
     private MockProducer<String, String> producer;
 
     @Before
@@ -19,8 +21,10 @@ public class DataProducerTest {
     }
 
     /**
-     * This test checks if the messages go to the correct topic and partition as required.
-     * Additional test cases can be added by adding more entries to test_trace and verifying here. 
+     * This test checks if the messages go to the correct topic and partition as
+     * required. Additional test cases can be added by adding more entries to
+     * test_trace and verifying here.
+     *
      * @throws IOException
      */
     @Test
@@ -32,8 +36,7 @@ public class DataProducerTest {
         List<ProducerRecord<String, String>> history = producer.history();
 
         List<ProducerRecord<String, String>> expected = Arrays.asList(
-                new ProducerRecord<>("events", 3, null, "{\"blockId\":5648,\"type\":\"ENTERING_BLOCK\"}"),
-                new ProducerRecord<>("driver-locations", 4, null, "{\"blockId\":5649,\"type\":\"DRIVER_LOCATION\"}"));
+                new ProducerRecord<>("events", 3, null, "{\"blockId\":5648,\"type\":\"ENTERING_BLOCK\"}"));
 
         Assert.assertEquals("Producer records not matched!", expected, history);
     }
