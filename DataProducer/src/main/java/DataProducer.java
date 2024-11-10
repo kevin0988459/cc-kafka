@@ -36,6 +36,7 @@ public class DataProducer {
     public void sendData() {
         try (BufferedReader reader = new BufferedReader(new FileReader(traceFileName))) {
             String line;
+            int rideRequestCount = 0;
 
             while ((line = reader.readLine()) != null) {
                 // parse the json object
@@ -44,6 +45,11 @@ public class DataProducer {
                 // skip the driver location event
                 if (type.equals("DRIVER_LOCATION")) {
                     continue;
+                }
+
+                if (type.equals("RIDE_REQUEST")) {
+                    rideRequestCount++;
+                    System.out.println("Sent ride request to partition", rideRequestCount);
                 }
                 // determine the topic
                 if (BROADCAST_EVENT_TYPES.contains(type)) {
