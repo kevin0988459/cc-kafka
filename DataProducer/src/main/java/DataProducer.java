@@ -23,7 +23,7 @@ public class DataProducer {
 
     private static final Set<String> BROADCAST_EVENT_TYPES = new HashSet<>(Arrays.asList(
             "RIDER_STATUS",
-            "RIDER_INTEREST",
+            "RIDER_INTEREST"
     ));
 
     public DataProducer(Producer producer, String traceFileName) {
@@ -35,7 +35,6 @@ public class DataProducer {
     public void sendData() {
         try (BufferedReader reader = new BufferedReader(new FileReader(traceFileName))) {
             String line;
-            int rideRequestCount = 0;
 
             while ((line = reader.readLine()) != null) {
                 // parse the json object
