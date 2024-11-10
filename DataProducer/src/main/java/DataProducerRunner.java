@@ -11,7 +11,7 @@ public class DataProducerRunner {
     public static void main(String[] args) throws Exception {
         // Kafka Config
         Properties p = new Properties();
-        p.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.31.88.233:9092");
+        p.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.31.86.55:9092");
         p.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         p.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         p.put(ProducerConfig.ACKS_CONFIG, "all");
