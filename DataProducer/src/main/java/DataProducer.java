@@ -17,14 +17,9 @@ public class DataProducer {
 
     private Producer<String, String> producer;
     private String traceFileName;
-    private static final String EVENTS_TOPIC = "events";
-    private static final int PARTITION_COUNT = 5;
+    private static final String EVENTS_TOPIC = "ad-click";
     private JsonParser jsonParser;
 
-    private static final Set<String> BROADCAST_EVENT_TYPES = new HashSet<>(Arrays.asList(
-            "RIDER_STATUS",
-            "RIDER_INTEREST"
-    ));
 
     public DataProducer(Producer producer, String traceFileName) {
         this.producer = producer;
@@ -39,34 +34,9 @@ public class DataProducer {
             while ((line = reader.readLine()) != null) {
                 // parse the json object
                 JsonObject jsonObject = jsonParser.parse(line).getAsJsonObject();
-                String type = jsonObject.get("type").getAsString();
-                // skip the driver location event
-                if (type.equals("DRIVER_LOCATION")) {
-                    continue;
-                }
-                // determine the topic
-                if (BROADCAST_EVENT_TYPES.contains(type)) {
-                    // Send to all partitions
-                    for (int partition = 0; partition < PARTITION_COUNT; partition++) {
-                        ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
-                        sendMessage(record);
-                    }
-                } 
-                // else {
-                //     // Send based on block ID partitioning
-                //     int blockId = jsonObject.get("blockId").getAsInt();
-                //     int partition = blockId % PARTITION_COUNT;
-                //     ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
-                //     sendMessage(record);
-                // }
-                if (type.equals("RIDE_REQUEST")) {
-                    int blockId = jsonObject.get("blockId").getAsInt();
-                    int partition = blockId % PARTITION_COUNT;
-                    ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, partition, null, line);
-                    sendMessage(record);
-                }
+                ProducerRecord<String, String> record = new ProducerRecord<>(EVENTS_TOPIC, null, line);
+                sendMessage(record);
             }
-
         } catch (Exception e) {
             System.err.println("Error reading trace file: " + e.getMessage());
         } finally {
