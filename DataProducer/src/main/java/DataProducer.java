@@ -23,7 +23,8 @@ public class DataProducer {
 
     private static final Set<String> BROADCAST_EVENT_TYPES = new HashSet<>(Arrays.asList(
             "RIDER_STATUS",
-            "RIDER_INTEREST"
+            "RIDER_INTEREST",
+            "RIDE_REQUEST"
     ));
 
     public DataProducer(Producer producer, String traceFileName) {
